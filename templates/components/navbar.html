@@ -1,0 +1,26 @@
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="logo">
+      <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="RedConnect Logo" /></a>
+    </div>
+
+<ul class="nav-links">
+  <li><a href="{{ url_for('index') }}" class="hover-underline">Home</a></li>
+  <li><a href="{{ url_for('search') }}" class="hover-underline">Search Blood</a></li>
+  <li><a href="{{ url_for('user_requests') }}" class="hover-underline">Requests</a></li>
+  <li><a href="{{ url_for('profile') }}" class="hover-underline">Profile</a></li>
+  {% if session.get('user_id') %}
+    {% if session.get('is_admin') %}
+      <li><a href="{{ url_for('dashboard_admin') }}" class="hover-underline">Admin</a></li>
+      <li><a href="{{ url_for('admin_user') }}" class="hover-underline">Users</a></li>
+      <li><a href="{{ url_for('stock') }}" class="hover-underline">Stock</a></li>
+    {% endif %}
+
+    <li><a href="{{ url_for('logout') }}" class="btn-login">Logout</a></li>
+  {% else %}
+    <li><a href="{{ url_for('login') }}" class="btn-login">Login</a></li>
+  {% endif %}
+</ul>
+
+  </div>
+</nav>

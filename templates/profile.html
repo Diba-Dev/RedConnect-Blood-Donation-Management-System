@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Profile – RedConnect{% endblock %}
+
+{% block content %}
+<section class="dashboard stock">
+
+    <!-- Header -->
+    <div class="dashboard-header">
+        <h2>User Profile</h2>
+        <p style="margin-top: 10px;">Manage and update your personal information</p>
+    </div>
+
+    <!-- Donor Toggle Section -->
+    <div class="donor-toggle-box">
+        <div class="donor-info">
+            <h3>Become a Donor</h3>
+            <p>List yourself as a blood donor and help save lives.</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('toggle_donor') }}">
+            <label class="donor-switch">
+                <input type="checkbox" name="is_donor" onchange="this.form.submit()" {% if user.is_donor %}checked{% endif %}>
+                <span class="slider"></span>
+            </label>
+        </form>
+    </div>
+
+    <a href="{{ url_for('donate_blood') }}" class="btn-primary new-request-btn" style="width: 35%;">
+        + Donate Blood
+    </a>
+
+    <!-- User Info Card -->
+    <div class="profile-card">
+        <h3>Personal Information</h3>
+        <p><strong>Name:</strong> {{ user.name }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Phone:</strong> {{ user.phone }}</p>
+        <p><strong>Blood Group:</strong> {{ user.blood_group }}</p>
+        <p><strong>District:</strong> {{ user.location }}</p>
+
+        <button id="edit-btn" class="btn-primary">Edit Information</button>
+    </div>
+
+    <!-- Edit Form (Hidden by default) -->
+    <!-- Edit Form -->
+<form id="edit-form" class="edit-form hidden" method="POST" action="{{ url_for('profile') }}">
+    <h3>✏️ Edit Information</h3>
+
+    <label>Name</label>
+    <input type="text" name="name" value="{{ user.name }}">
+
+    <label>Email</label>
+    <input type="email" name="email" value="{{ user.email }}">
+
+    <label>Phone</label>
+    <input type="text" name="phone" value="{{ user.phone }}">
+
+    <label>Blood Group</label>
+    <select name="blood_group">
+        {% for bg in ["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"] %}
+            <option value="{{ bg }}" {% if user.blood_group == bg %}selected{% endif %}>{{ bg }}</option>
+        {% endfor %}
+    </select>
+
+    <label>District</label>
+    <input type="text" name="location" value="{{ user.location }}">
+
+    <button type="submit" class="btn-primary">Save Changes</button>
+</form>
+
+
+<!-- Donations -->
+<div class="recent-requests">
+    <h3>Your Donations</h3>
+    {% if donations %}
+    <div class="donation-slider">
+        {% for d in donations %}
+        <div class="request-card">
+            <p><strong>Blood Group:</strong> {{ d.blood_group }}</p>
+            <p><strong>Type:</strong> {{ d.donation_type }}</p>
+            <p><strong>Date:</strong> {{ d.donation_date }}</p>
+            <p><strong>Notes:</strong> {{ d.notes or "None" }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p style="text-align: center; padding: 20px 0px;">No donations recorded yet.</p>
+    {% endif %}
+</div>
+
+
+<!-- Notifications -->
+<div class="recent-requests">
+    <h3>Latest Notifications</h3>
+
+    {% if notifications %}
+        {% for n in notifications %}
+        <div class="notification-card {{ n.type }}">
+            <p><strong>{{ n.title }}</strong></p>
+            <p>{{ n.message }}</p>
+
+            {% if n.admin_name and n.admin_phone %}
+            <p>
+                <strong>Admin Contact:</strong>
+                {{ n.admin_name }} |
+                <a href="tel:{{ n.admin_phone }}">{{ n.admin_phone }}</a>
+            </p>
+            {% endif %}
+
+            <span class="notif-date">{{ n.created_at }}</span>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="text-align: center;">No notifications yet.</p>
+    {% endif %}
+</div>
+
+
+</section>
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user_request.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+<script>
+    const editBtn = document.getElementById("edit-btn");
+    const editForm = document.getElementById("edit-form");
+
+    editBtn.addEventListener("click", () => {
+        editForm.classList.toggle("hidden");
+    });
+    // Simple slider for donations if more than 2
+const slider = document.querySelector(".donation-slider");
+if (slider) {
+    let index = 0;
+    const items = slider.children;
+    if (items.length > 2) {
+        setInterval(() => {
+            items[index].style.display = "none";
+            index = (index + 1) % items.length;
+            items[index].style.display = "block";
+        }, 3000);
+    }
+}
+
+</script>
+{% endblock %}

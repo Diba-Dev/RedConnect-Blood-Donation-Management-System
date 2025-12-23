@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Admin – User List | RedConnect{% endblock %}
+
+{% block content %}
+
+<section class="admin-users-section">
+
+    <h2 class="admin-title">User Directory</h2>
+    <p class="admin-subtitle">
+        Search and filter users by blood group, location, and donor status.
+    </p>
+
+    <!-- Search + Filters -->
+    <form class="admin-filter-box" method="GET">
+
+        <div class="filter-group">
+            <label>Blood Group</label>
+            <select name="blood_group">
+                <option value="">All</option>
+                {% for bg in ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"] %}
+                    <option value="{{ bg }}" {% if request.args.get('blood_group') == bg %}selected{% endif %}>{{ bg }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Location</label>
+            <input type="text" name="location" placeholder="Enter location" value="{{ request.args.get('location', '') }}">
+        </div>
+
+        <button type="submit" class="btn-filter">Search</button>
+    </form>
+
+    <!-- User List Table -->
+    <div class="user-table-container">
+        <table class="user-table">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Contact</th>
+                    <th>Blood Group</th>
+                    <th>Donor Status</th>
+                    <th>Last Donation</th>
+                    <th>Donation Eligibility</th>
+                    <th>Location</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if users %}
+                {% for u in users %}
+                <tr>
+    <td>{{ u.name }}</td>
+    <td>{{ u.phone }}</td>
+    <td>{{ u.blood_group }}</td>
+
+    <td>
+        <label class="donor-switch {% if not u.is_donor %}donor-disabled{% endif %}">
+            <input type="checkbox" disabled {% if u.is_donor %}checked{% endif %}>
+            <span class="slider"></span>
+        </label>
+    </td>
+
+    <td>{{ u.last_donation or "Never" }}</td>
+
+    <td>
+        {% if u.eligibility.eligible %}
+            <span class="eligible">{{ u.eligibility.message }}</span>
+        {% else %}
+            <span class="not-eligible">{{ u.eligibility.message }}</span>
+        {% endif %}
+    </td>
+
+    <td>{{ u.location }}</td>
+
+    <!-- 🔥 ACTIONS -->
+    <td class="action-cell">
+        {% if u.id != session.get('user_id') %}
+        <!-- Make / Remove Admin -->
+        <form method="POST" action="{{ url_for('toggle_admin', user_id=u.id) }}" style="display:inline;">
+            <button class="approve-btn">
+                {% if u.is_admin %}Remove Admin{% else %}Make Admin{% endif %}
+            </button>
+        </form>
+
+        <!-- Delete User -->
+        <form method="POST" action="{{ url_for('delete_user', user_id=u.id) }}"
+              style="display:inline;"
+              onsubmit="return confirm('Are you sure you want to delete this user?');">
+            <button class="reject-btn" style="margin-top: 5px;">Delete</button>
+        </form>
+        {% else %}
+            <span class="note-text">You</span>
+        {% endif %}
+    </td>
+</tr>
+
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="8" class="error-msg">No users found</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+</section>
+
+{% endblock %}

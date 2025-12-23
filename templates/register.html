@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Register | RedConnect{% endblock %}
+
+{% block content %}
+
+<section class="form-container">
+    <div class="form-box">
+
+        <h2>Create Account</h2>
+        <p class="form-subtext">Join RedConnect</p>
+
+        <form method="POST" action="{{ url_for('register') }}">
+
+            <label>Full Name</label>
+            <input type="text" name="name" placeholder="Enter your name" required>
+
+            <label>Email</label>
+            <input type="email" name="email" placeholder="Enter your email" required>
+
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Create a password" required>
+
+            <label>Confirm Password</label>
+            <input type="password" name="confirm_password" placeholder="Confirm your password" required>
+
+            <label>Blood Group</label>
+            <select name="blood_group" required>
+                <option value="">-- Select --</option>
+                <option>A+</option>
+                <option>A-</option>
+                <option>B+</option>
+                <option>B-</option>
+                <option>O+</option>
+                <option>O-</option>
+                <option>AB+</option>
+                <option>AB-</option>
+            </select>
+
+            <label>Location</label>
+            <input type="text" name="location" placeholder="Enter your area/location" required>
+
+            <label>Contact Number</label>
+            <input type="text" name="phone" placeholder="Enter your contact number" required>
+
+            <button type="submit" class="btn-primary full-width">
+                Register
+            </button>
+
+            <p class="redirect-text">
+                Already have an account?
+                <a href="{{ url_for('login') }}">Login</a>
+            </p>
+
+        </form>
+
+    </div>
+</section>
+
+{% endblock %}

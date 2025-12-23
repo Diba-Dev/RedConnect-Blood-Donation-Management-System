@@ -1,0 +1,44 @@
+.profile-container {
+    max-width: 700px;
+    margin: auto;
+}
+
+.profile-card,
+.edit-form {
+    width: 600px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px #ddd;
+}
+
+.profile-card p {
+    margin: 10px 0;
+}
+
+.edit-form input,
+.edit-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+}
+
+.btn {
+    background: #e60023;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.save-btn {
+    background: green;
+}
+
+.hidden {
+    display: none;
+}

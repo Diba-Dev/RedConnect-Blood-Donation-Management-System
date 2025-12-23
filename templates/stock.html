@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Stock Management – RedConnect
+{% endblock %}
+
+{% block content %}
+  <section class="dashboard stock">
+    <div class="dashboard-header">
+      <h2>Blood Stock Management</h2>
+      <p style="margin-top: 10px;">Monitor and update blood availability</p>
+    </div>
+
+    <div class="stock-box">
+      <!-- Search Blood -->
+      <div class="form-box">
+        <h3 style="padding-bottom: 20px;">Search Blood</h3>
+        <form class="stock-form" method="GET">
+          <label>Blood Group</label>
+          <select name="blood_group">
+            <option value="">-- Select --</option>
+            <option>A+</option>
+            <option>A-</option>
+            <option>B+</option>
+            <option>B-</option>
+            <option>O+</option>
+            <option>O-</option>
+            <option>AB+</option>
+            <option>AB-</option>
+          </select>
+
+          <label>Location</label>
+          <input type="text" name="location" placeholder="Enter Location" />
+
+          <button type="submit" class="btn-primary">Search</button>
+        </form>
+      </div>
+
+      <!-- Add / Update Stock -->
+      <div class="form-box">
+        <h3 style="padding-bottom: 20px;">Add / Update Stock</h3>
+        <form class="stock-form" method="POST">
+          <label>Blood Group</label>
+          <select name="blood_group" required>
+            <option value="">-- Select --</option>
+            <option>A+</option>
+            <option>A-</option>
+            <option>B+</option>
+            <option>B-</option>
+            <option>O+</option>
+            <option>O-</option>
+            <option>AB+</option>
+            <option>AB-</option>
+          </select>
+
+          <label>Available Units</label>
+          <input type="number" name="units" placeholder="Enter number of units" required />
+
+          <label>Location</label>
+          <input type="text" name="location" placeholder="Enter Location" required />
+
+          <button type="submit" class="btn-primary">Add / Update</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Stock Table -->
+    <div class="stock-table" style="margin-top:30px;">
+      <h3>Current Blood Stock</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Blood Group</th>
+            <th>Units Available</th>
+            <th>Last Updated</th>
+            <th>Location</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in stock %}
+            <tr>
+              <td>{{ s.blood_group }}</td>
+              <td>{{ s.units }}</td>
+              <td>{{ s.last_updated }}</td>
+              <td>{{ s.location }}</td>
+              <td>
+                <form method="POST">
+                  <input type="hidden" name="stock_id" value="{{ s.id }}" />
+                  <input type="number" name="units" value="{{ s.units }}" style="width:60px;" />
+                  <button type="submit" class="btn-outline">Update</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endblock %}

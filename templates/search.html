@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Search Blood | RedConnect
+{% endblock %}
+
+{% block content %}
+  <section class="form-container">
+    <div class="form-box">
+      <h2>Search Blood Centers</h2>
+      <form method="GET" action="{{ url_for('search') }}">
+        <label>Blood Group</label>
+        <select name="blood_group" required>
+          <option value="">-- Select --</option>
+          <option>A+</option>
+          <option>A-</option>
+          <option>B+</option>
+          <option>B-</option>
+          <option>O+</option>
+          <option>O-</option>
+          <option>AB+</option>
+          <option>AB-</option>
+        </select>
+
+        <label>Location (optional)</label>
+        <input type="text" name="location" placeholder="Enter city or hospital" />
+
+        <button type="submit" class="btn-primary full-width">Search</button>
+      </form>
+    </div>
+
+    <div id="results" class="recent-requests">
+      {% if results is defined %}
+        {% if results|length == 0 %}
+          <p class="error-msg">No results found.</p>
+        {% else %}
+          {% for r in results %}
+            <div class="result-card">
+              <h3>Blood Group: {{ r.blood_group }}</h3>
+              <p>
+                <strong>Available Units:</strong> {{ r.units }}
+              </p>
+              <p>
+                <strong>Location:</strong> {{ r.location }}
+              </p>
+              <p>
+                <strong>Center:</strong> {{ r.location }}
+              </p>
+              <a href="{{ url_for('new_request') }}"><button class="btn-outline">Request Now</button></a>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endif %}
+    </div>
+  </section>
+{% endblock %}

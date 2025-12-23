@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard – RedConnect{% endblock %}
+
+{% block content %}
+<section class="dashboard">
+    <!-- Header -->
+    <div class="dashboard-header">
+        <h2>Admin Dashboard</h2>
+        <p>Monitor stock, requests, and system activity</p>
+    </div>
+
+    <!-- Admin Cards -->
+    <div class="dashboard-cards">
+        <a href="{{ url_for('stock') }}" class="dash-card">
+            <h3>Manage Stock</h3>
+            <p>Update and maintain blood availability</p>
+        </a>
+        <a href="{{ url_for('admin_user') }}" class="dash-card">
+            <h3>User Directory</h3>
+            <p>Search User by location or group</p>
+        </a>
+    </div>
+
+    <!-- System Stats -->
+    <div class="recent-requests">
+        <h3>System Overview</h3>
+
+        <div class="request-card">
+            <p><strong>Total Requests:</strong> {{ total_requests }}</p>
+            <p><strong>Pending:</strong> <span class="status pending">{{ pending_requests }}</span></p>
+        </div>
+
+        <div class="request-card">
+            <p><strong>Total Donors:</strong> {{ total_donors }}</p>
+            <p><strong>Active Today:</strong> <span class="status approved">{{ active_donors_today }}</span></p>
+        </div>
+    </div>
+
+    <div class="dashboard-header" style="margin-top: 70px;">
+        <h2>Manage Blood Requests</h2>
+        <p>Approve or reject incoming blood requests</p>
+    </div>
+
+    <div class="stock-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Blood Group</th>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th>Contact</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in requests %}
+                <tr>
+                    <td>{{ req.user_name }}</td>
+                    <td>{{ req.blood_group }}</td>
+                    <td>{{ req.location }}</td>
+                    <td>{{ req.request_date }}</td>
+                    <td>{{ req.contact }}</td>
+                    <td>
+                        <span class="status {% if req.status == 'Pending' %}pending{% elif req.status == 'Approved' %}approved{% else %}rejected{% endif %}">
+                            {{ req.status }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if req.status != 'Approved' %}
+                        <form method="POST" action="{{ url_for('approve_request', request_id=req.id) }}">
+                            <button class="approve-btn">Approve</button>
+                        </form>
+                        {% endif %}
+                        {% if req.status != 'Rejected' %}
+                        <form method="POST" action="{{ url_for('reject_request', request_id=req.id) }}">
+                            <button class="reject-btn" style="margin-top: 5px;">Reject</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

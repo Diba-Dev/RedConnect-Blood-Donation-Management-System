@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Your Requests | RedConnect
+{% endblock %}
+
+{% block content %}
+<section class="dashboard">
+  <div class="dashboard-header" style="margin-bottom: 30px;">
+    <h2>Your Requests</h2>
+    <p style="margin-top: 10px;">Track and manage your blood requests</p>
+  </div>
+
+  <a href="{{ url_for('new_request') }}" class="btn-primary new-request-btn">+ Make New Request</a>
+
+  <div class="recent-requests">
+    <h3>Your Recent Requests</h3>
+
+    {% if requests %}
+      {% for req in requests %}
+      <div class="request-card">
+        <p><strong>Blood Group:</strong> {{ req['blood_group'] }}</p>
+        <p><strong>Location:</strong> {{ req['location'] }}</p>
+        <p><strong>Date:</strong> {{ req['request_date'] }}</p>
+        <p><strong>Status:</strong>
+          <span class="status {{ req['status']|lower }}">{{ req['status'] }}</span>
+        </p>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p style="text-align: center;">No blood requests found. Make a new request!</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Donate Blood – RedConnect
+{% endblock %}
+
+{% block content %}
+  <section class="donation-section">
+    <h2 class="donation-title">Donate Blood</h2>
+    <p class="donation-subtitle">Fill up the form below to register your blood donation.</p>
+
+    <form method="POST" action="{{ url_for('donate_blood') }}">
+      <label>Date of Donation</label>
+      <input type="date" name="donation_date" required />
+
+      <label>Blood Group</label>
+      <select name="blood_group" required>
+        <option value="">-- Select Blood Group --</option>
+        <option>A+</option> <option>A−</option> <option>B+</option> <option>B−</option>
+        <option>O+</option> <option>O−</option> <option>AB+</option> <option>AB−</option>
+      </select>
+
+      <label>Donation Type</label>
+      <select name="donation_type" required>
+        <option>Whole Blood</option>
+        <option>Plasma</option>
+        <option>Platelets</option>
+      </select>
+
+      <label>Additional Notes</label>
+      <textarea name="notes" rows="4" placeholder="Optional notes"></textarea>
+
+      <button type="submit" class="btn-submit">Submit Donation</button>
+    </form>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+  <!-- Additional JS for donation page -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}
