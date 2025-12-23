@@ -1,4 +1,4 @@
-# 🔴 RedConnect – Blood Donation Management System
+# RedConnect – Blood Donation Management System
 
 RedConnect is a web-based blood donation management system developed as an academic project for the BSc in Computer Science & Engineering program at Port City International University.
 
@@ -34,3 +34,4 @@ python app.py
 ## License
 
 This project is licensed under the MIT License.
+
